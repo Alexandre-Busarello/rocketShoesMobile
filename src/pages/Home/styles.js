@@ -57,6 +57,7 @@ export const ButtonAmount = styled.View`
 
 export const ButtonAmountText = styled.Text`
   color: #fff;
+  margin-left: 4px;
 `;
 
 export const TextButtonAdd = styled.Text`

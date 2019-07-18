@@ -24,6 +24,7 @@ export const Logo = styled.Image.attrs({
 
 export const Cart = styled.View`
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
 `;
 
