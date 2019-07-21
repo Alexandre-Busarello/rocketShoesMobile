@@ -2,14 +2,29 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { Wrapper, Container, Logo, Cart, CartIcon, CartBadge } from './styles';
+import {
+  Wrapper,
+  Container,
+  LogoContainer,
+  Logo,
+  Cart,
+  CartIcon,
+  CartBadge,
+} from './styles';
 
-function Header({ cartSize }) {
+function Header({ navigation, cartSize }) {
+  const handleNavigate = (page, params) => {
+    if (params) navigation.navigate(page, { params });
+    else navigation.navigate(page);
+  };
+
   return (
     <Wrapper>
       <Container>
-        <Logo />
-        <Cart>
+        <LogoContainer onPress={() => handleNavigate('Home')}>
+          <Logo />
+        </LogoContainer>
+        <Cart onPress={() => handleNavigate('Cart')}>
           <CartIcon />
           <CartBadge>{cartSize}</CartBadge>
         </Cart>
@@ -20,6 +35,9 @@ function Header({ cartSize }) {
 
 Header.propTypes = {
   cartSize: PropTypes.number.isRequired,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }).isRequired,
 };
 
 const mapStateToProps = state => ({

@@ -14,6 +14,11 @@ export default function cart(state = [], action) {
         const product = draft.find(p => p.id === id);
         product.amount = amount;
       });
+    case '@cart/REMOVE_SUCCESS':
+      return produce(state, draft => {
+        const { id } = action;
+        draft.splice(draft.findIndex(p => p.id === id), 1);
+      });
     default:
       return state;
   }

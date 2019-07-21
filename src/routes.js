@@ -13,9 +13,9 @@ const Routes = createAppContainer(
     },
     {
       headerBackTitleVisible: false,
-      defaultNavigationOptions: {
-        header: <Header />,
-      },
+      defaultNavigationOptions: navigation => ({
+        header: <Header {...navigation} />,
+      }),
     }
   )
 );
