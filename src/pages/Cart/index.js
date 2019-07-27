@@ -1,8 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { View } from 'react-native';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import * as CartActions from '../../store/modules/cart/actions';
@@ -33,17 +31,30 @@ import {
   EmptyText,
 } from './styles';
 
-function Cart({ products, total, updateAmountRequest, removeFromCartRequest }) {
+export default function Cart() {
+  const products = useSelector(state =>
+    state.cart.map(p => ({
+      ...p,
+      subtotal: formatPrice(p.price * p.amount),
+    }))
+  );
+
+  const total = useSelector(state =>
+    formatPrice(state.cart.reduce((sum, p) => sum + p.price * p.amount, 0))
+  );
+
+  const dispatch = useDispatch();
+
   function handleIncrement(id, amount) {
-    updateAmountRequest(id, amount + 1);
+    dispatch(CartActions.updateAmountRequest(id, amount + 1));
   }
 
   function handleDecrement(id, amount) {
-    updateAmountRequest(id, amount - 1);
+    dispatch(CartActions.updateAmountRequest(id, amount - 1));
   }
 
   function handleRemove(id) {
-    removeFromCartRequest(id);
+    dispatch(CartActions.removeFromCartRequest(id));
   }
 
   return (
@@ -116,28 +127,3 @@ function Cart({ products, total, updateAmountRequest, removeFromCartRequest }) {
     </Container>
   );
 }
-
-Cart.propTypes = {
-  products: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  total: PropTypes.string.isRequired,
-  updateAmountRequest: PropTypes.func.isRequired,
-  removeFromCartRequest: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = state => ({
-  products: state.cart.map(p => ({
-    ...p,
-    subtotal: formatPrice(p.price * p.amount),
-  })),
-  total: formatPrice(
-    state.cart.reduce((sum, p) => sum + p.price * p.amount, 0)
-  ),
-});
-
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(CartActions, dispatch);
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Cart);
